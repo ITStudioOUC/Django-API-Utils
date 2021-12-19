@@ -10,7 +10,7 @@
 
 环境要求：
 
-`Django >= 3.29`, `djangorestframework >= 3.12`
+`Django >= 3.2`, `djangorestframework >= 3.12`
 
 ## api_view
 
