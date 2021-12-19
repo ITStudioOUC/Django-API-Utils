@@ -1,6 +1,6 @@
 # Django-API-Utils
 
-基于Django编写后端API的一些自己编写的组件和工具，致力于努力探究 Django 最佳实践。
+基于Django编写后端API的一些组件和工具，致力于努力探究 Django 最佳实践。
 
 基于[ITM-0011](https://github.com/ITStudioOUC/ITM/blob/main/documents/ITM-0011.txt)中的规范编写，仍待完善和在实践中优化。
 
