@@ -63,12 +63,12 @@ if expr<error>:
 
 ## response
 
-实践[ITM-0011](https://github.com/ITStudioOUC/ITM/blob/main/documents/ITM-0011.txt)中提出的前后端数据交互规范。将返回格式固定为：
+实践[ITM-0011](https://github.com/ITStudioOUC/ITM/blob/main/documents/ITM-0011.txt)中提出的前后端数据交互规范。将返回格式固定为如下 json 格式：
 
 ```json
 {
-    "code": xxx,
-    "msg": xxx,
+    "code": 20000,
+    "msg": "OK",
     "data": {}
 }
 ```
