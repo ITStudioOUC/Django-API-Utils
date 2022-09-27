@@ -2,7 +2,7 @@ import json
 
 from django.http import HttpResponse
 
-from utils.response_status import ResponseStatus
+from .response_status import ResponseStatus
 
 
 class Response(HttpResponse):

@@ -1,7 +1,7 @@
 """
 自定义异常类
 """
-from utils.response_status import ResponseStatus
+from .response_status import ResponseStatus
 
 
 class ValidationException(Exception):

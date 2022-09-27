@@ -128,3 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .idea/
+/apps
+/apiutils
+db.sqlite3
+manage.py
+/.gitignore

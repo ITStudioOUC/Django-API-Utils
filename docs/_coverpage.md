@@ -1,4 +1,4 @@
-<img alt="logo" height="122px" src="logo.png" width="122px"/>
+![logo](logo.png ':size=20%')
 
 # Django-API-Utils<small> v0.2 </small>
 

@@ -1,126 +1,92 @@
-# Django-API-Utils
+# 项目说明
 
-基于Django编写后端API的一些组件和工具，致力于努力探究 Django 最佳实践。
+Django-API-Utils是基于Django编写后端API的一些组件和工具，致力于努力探究 Django 最佳实践。
 
-基于 [ITM-0011](https://github.com/ITStudioOUC/ITM/blob/main/documents/ITM-0011.txt) 中的规范编写，仍待完善和在实践中优化。
+目前基于 [ITM-0011](https://github.com/ITStudioOUC/ITM/blob/main/documents/ITM-0011.txt) 中的规范编写，仍待完善和在实践中优化。
 
-## 依赖
+# 环境依赖
 
 目前已在 Django 3 下测试可以成功运行。
 
 环境要求：
 
-`Django >= 3.2`, `djangorestframework >= 3.12`
+`Django >= 3.2`, `djangorestframework >= 3.12` , `djangorestframework-simplejwt >= 5.0.0`
+（如果不使用认证组件，将auth.py删除即可，不必安装此模块）
 
-## api_view
+# 初始化项目
 
-提供了两个基于 `ViewSet` 类的封装，加入了 `base_url_path`, `base_url_name` 属性用于自动化收集并注册 API 的 URL，同时重载了处理异常函数，使得无论任何时候都可以正常返回。
+1. 下载本项目源码，将utils文件夹拖到项目根目录下
 
-使用示例:
+   下载本项目源码可以使用git工具、直接在Github上Download ZIP、或者下载发布的release包。
 
-```python
-# views.py
-class BlogController(ViewSetPlus):
-    serializer_class = BlogSerializer
-    base_url_name = "blog"
-    base_url_path = "blog"
+2. 新建`apps`目录，将项目内的app放入apps文件夹内。
 
-    @post_mapping(value="add")
-    def addBlog(self, request, *args, **kwargs):
-        api_data = JSONParser().parse(request)
-        serializer = BlogSerializer(data=api_data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response(ResponseStatus.OK)
+3. 在`settings.py`文件内，新增apps目录到`BASE_DIR`
 
-    @get_mapping(value="search")
-    def getBlog(self, request, *args, **kwargs):
-        queryset = Blog.objects.all()
-        serializers = BlogSerializer(queryset, many=True)
-        return Response(ResponseStatus.OK, serializers.data)
+   ```python
+   ...
+   BASE_DIR = Path(__file__).resolve().parent.parent
+   # 新增下面这一行
+   sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+   ...
+   ```
 
-class BlogTester(APIViewPlus):
-    url_pattern = "blog/test"
+4. 在根路由文件`urls.py`下初始化`Router Build`
+
+   ```python
+   from autils.router_builder import RouterBuilder
+   router = RouterBuilder()
+   urlpatterns = [
+       path("api/", include(router.urls)),
+       path("api/", include(router.url_patterns)),
+   ]
+   ```
+
+5. （非必需）在项目根目录下新建`config.json`文件，将项目的一些配置信息和敏感信息写到json文件中，并在`settings.py`中读取
+
+   ```python
+   import json
+   
+   # Configuration File
+   with open('./conf.json', 'r') as f:
+       config = json.load(f)
+   
+   SECRET_KEY = config.get('SECRET_KEY','')
+   
+   MYSQL_DB_NAME = config.get('MYSQL_DB_NAME','')
+   MYSQL_DB_USER = config.get('MYSQL_DB_USER','')
+   MYSQL_DB_PASSWORD = config.get('MYSQL_DB_PASSWORD','')
+   ```
+
+   *这样的好处在于，避免将敏感信息暴露到Git服务器上。*
+
+初始化完后，项目的目录树大概是这样的：
+
+```
+.
+├── apps
+│   ├── __init__.py
+│   └── <app_name>
+│       ├── __init__.py
+│       ├── admin.py
+│       ├── apps.py
+│       ├── migrations
+│       │   └── __init__.py
+│       ├── models.py
+│       ├── serializers.py
+│       ├── tests.py
+│       └── views.py
+├── <project_name>
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── .gitignore
+├── manage.py
+└── config.json[可选]
 ```
 
-支持使用基于 router 装饰器的方法注册接口，所有被注册接口会拼上 `base_url_path`，同时也支持类似与 `APIView` 的写法，你需要手动的实现 `get`, `post`等方法，他们对应 URL 的同名请求。
+# 使用教程
 
-
-## exception
-
-自定义异常类，结合自定义枚举类 [ResponseStatus](#response_status) 使用。
-
-使用示例：
-
-```python
-if expr<error>:
-    raise ValidationException(ResponseStatus.<ERROR Enmu>)
-```
-
-## mapping
-
-基于 `rest_framework.decorators.action` 的进一步封装，细分分为了`get_mapping`, `post_mapping`等，具体参考文件内的注释。
-
-## response
-
-实践 [ITM-0011](https://github.com/ITStudioOUC/ITM/blob/main/documents/ITM-0011.txt) 中提出的前后端数据交互规范。将返回格式固定为如下 json 格式：
-
-```json
-{
-    "code": 20000,
-    "msg": "OK",
-    "data": {}
-}
-```
-
-## response_status
-
-实践 [ITM-0011](https://github.com/ITStudioOUC/ITM/blob/main/documents/ITM-0011.txt) 中提出的状态码和描述信息绑定的规范。结合自定义的 `Response`类和异常类，一致化 API 返回数据。
-
-## router_builder
-
-一个自动化收集视图类并绑定 URL 的方法，使用时在根目录（推荐）的 `urls.py`中声明：
-
-该类将会收集 `views.py` 中所有继承 `ViewSetPlus` 和 `APIViewPlus` 的类自动在  `urls.py` 中注册。
-
-```python
-# views.py
-class BlogController(ViewSetPlus):
-    base_url_name = "blog"
-    base_url_path = "blog"
-
-    @post_mapping(value="add")
-    def addBlog(self, request, *args, **kwargs):
-        ......
-
-    @get_mapping(value="search")
-    def getBlog(self, request, *args, **kwargs):
-        ......
-
-class BlogTester(APIViewPlus):
-    url_pattern = "blog/test"
-    
-    def post(self, request, *args, **kwargs):
-        ......
-    def get(self, request, *args, **kwargs):
-        ......
-
-# urls.py
-router = RouterBuilder()
-urlpatterns = [
-    path("api/", include(router.urls)),
-    path("api/", include(router.url_patterns)),
-]
-```
-
-此时将会生成类似如下的结果：
-
-```python
-urlpatterns = [
-    path("api/blog/add", addBlog, name="blog-addBlog"),
-    path("api/blog/search", getBlog, name="blog-getBlog"),
-    path("api/blog/test", BlogTester.as_view(), name="blogtester")
-]
-```
-
-更多的信息参考文件内的文档描述。
+参考文档：    

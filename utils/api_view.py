@@ -2,9 +2,9 @@ from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.viewsets import ViewSet
 from rest_framework_simplejwt.exceptions import InvalidToken
 
-from utils.response import Response
-from utils.response_status import ResponseStatus
-from utils.exception import ValidationException
+from .response import Response
+from .response_status import ResponseStatus
+from .exception import ValidationException
 
 from django.conf import settings
 

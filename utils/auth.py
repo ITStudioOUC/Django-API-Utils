@@ -17,6 +17,20 @@ from .exception import ValidationException
 from .response_status import ResponseStatus
 
 
+class ITJWTTokenUserAuthentication(JWTTokenUserAuthentication):
+    """
+    继承JWTTokenUserAuthentication的一个认证组件，使request.user为ITTokenUser类型
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def get_user(self, validated_token):
+        if api_settings.USER_ID_CLAIM not in validated_token:
+            raise InvalidToken(_('Token contained no recognizable user identification'))
+        return ITTokenUser(validated_token)
+
+
 class ITTokenObtainPairSerializer(Serializer):
     """
     这是对rest_framework_simplejwt的一个重写，去除了原认证组件post信息内username和password为必填
@@ -92,6 +106,10 @@ class ITTokenRefreshView(ITTokenViewBase):
     {
         'refresh':''
     }
+    返回：
+    {
+        'access':''
+    }
     """
     serializer_class = serializers.TokenRefreshSerializer
 
@@ -121,14 +139,3 @@ class ITTokenUser(TokenUser):
 
     def __str__(self):
         return f'ITTokenUser {self.id}'
-
-
-class ITJWTTokenUserAuthentication(JWTTokenUserAuthentication):
-    """
-    继承JWTTokenUserAuthentication的一个认证组件，使request.user为ITTokenUser类型
-    """
-
-    def get_user(self, validated_token):
-        if api_settings.USER_ID_CLAIM not in validated_token:
-            raise InvalidToken(_('Token contained no recognizable user identification'))
-        return ITTokenUser(validated_token)
