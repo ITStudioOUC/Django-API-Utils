@@ -35,7 +35,7 @@ class BlogController(ViewSetPlus):
 
     @post_mapping(value="add")
     def addBlog(self, request, *args, **kwargs):
-        api_data = JSONParser().parse(request)
+        api_data = request.data
         serializer = BlogSerializer(data=api_data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -130,7 +130,7 @@ Response(ResponseStatus.UNEXPECTED_ERROR)
 
 返回页面为：
 
-```python
+```json
 {
     "code": 50000,
     "msg": "意外错误"

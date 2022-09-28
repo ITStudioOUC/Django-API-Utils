@@ -14,7 +14,7 @@
 
 ```python
 from django.urls import path, include
-from autils.router_builder import RouterBuilder
+from utils.router_builder import RouterBuilder
 
 router = RouterBuilder()
 urlpatterns = [
