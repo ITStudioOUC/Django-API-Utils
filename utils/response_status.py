@@ -20,6 +20,10 @@ class ResponseStatus(Enum):
 
     VALIDATION_ERROR = (40001, '数据格式错误')
 
+    AUTH_FAILED_ERROR = (40002, '用户认证失败')
+
+    TOKEN_ERROR = (40002, 'token不合法或已过期')
+
     @property
     def code(self):
         return self.value[0]

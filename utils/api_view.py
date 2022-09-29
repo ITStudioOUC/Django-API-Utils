@@ -1,9 +1,10 @@
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.viewsets import ViewSet
+from rest_framework_simplejwt.exceptions import InvalidToken
 
-from utils.response import Response
-from utils.response_status import ResponseStatus
-from utils.exception import ValidationException
+from .response import Response
+from .response_status import ResponseStatus
+from .exception import ValidationException
 
 from django.conf import settings
 
@@ -47,13 +48,14 @@ class ViewSetPlus(ViewSet):
                 e = "".join(traceback.format_exception(*(type(exc), exc, exc.__traceback__)))
                 pattern = re.compile(r'File \"(.*)\", line (\d+),')
                 exception = re.findall(pattern, e)[-1]
-                # 红色高亮输出
-                print(f'\033[1;31m[Error] {exc} in file {exception[0]} , line {exception[1]}\033[0m')
+                print(f'\033[1;31m[Error] {exc} in file "{exception[0]}" , line {exception[1]}\033[0m')
             elif level == 'default':
                 # 默认报错
                 traceback.print_exc()
             else:
                 pass
+        if isinstance(exc, InvalidToken):
+            return Response(ResponseStatus.TOKEN_ERROR)
 
         if isinstance(exc, MethodNotAllowed):
             return Response(ResponseStatus.METHOD_NOT_ALLOWED_ERROR)
