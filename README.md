@@ -89,4 +89,4 @@ Django-API-Utils是基于Django编写后端API的一些组件和工具，致力�
 
 # 使用教程
 
-参考文档：    
+更多详细信息请参考[在线文档](https://itstudioouc.github.io/Django-API-Utils/)    
