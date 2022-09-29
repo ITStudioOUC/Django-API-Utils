@@ -80,7 +80,7 @@ class BlogController(APIViewPlus):
 
 # Response
 
-Response基于django的`HttpResponse`修改，返回json页面，已经对输出进行美化（不会编码，且4空格缩进输出）
+Response基于django的`HttpResponse`修改，返回json页面。
 
 ```python
 Response(ResponseStatus.xxx, data)

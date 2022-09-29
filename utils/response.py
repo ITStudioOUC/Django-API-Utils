@@ -34,8 +34,9 @@ class Response(HttpResponse):
 
         if status == ResponseStatus.OK and bool(data):
             content['data'] = data
-
-        content = json.dumps(content, ensure_ascii=False, indent=4)
+        
+        # indent > 0 和 ensure_ascii=False 会增大 http 传输的 payload, 影响性能
+        content = json.dumps(content)
 
         super().__init__(content=content,
                          content_type='application/json',
