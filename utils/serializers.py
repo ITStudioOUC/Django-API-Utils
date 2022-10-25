@@ -34,4 +34,4 @@ class ITModelSerializer(serializers.ModelSerializer):
                     pass
             raise ValidationError(self.errors)
 
-        return not bool(self._errors)
+        return not self._errors
