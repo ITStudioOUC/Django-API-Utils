@@ -39,3 +39,6 @@ class ArticleView(ViewSetPlus):
         return Response(ResponseStatus.OK, serializer.data)
 ```
 
+## DEBUG_LEVEL
+
+在`settings.py`中配置DEBUG_LEVEL可以出现不同的报错方式，可选项有`default`（默认报错），`console`（简易报错），默认为`console`

@@ -11,6 +11,12 @@ from django.conf import settings
 import traceback
 import re
 
+debug = settings.DEBUG
+try:
+    level = settings.DEBUG_LEVEL
+except:
+    level = 'console'
+
 
 class ViewSetPlus(ViewSet):
     """
@@ -38,17 +44,17 @@ class ViewSetPlus(ViewSet):
         # print(exc)
         # logger.error(exc)
 
-        debug = settings.__dict__.get('DEBUG', False)
         if debug:
-            level = settings.__dict__.get('DEBUG_LEVEL', 'console')
             if level == 'console':
                 # 报错定位不准，放弃了
                 # file = exc.__traceback__.tb_frame.f_globals["__file__"]
                 # line = exc.__traceback__.tb_lineno
-                e = "".join(traceback.format_exception(*(type(exc), exc, exc.__traceback__)))
+                e = "".join(traceback.format_exception(
+                    *(type(exc), exc, exc.__traceback__)))
                 pattern = re.compile(r'File \"(.*)\", line (\d+),')
                 exception = re.findall(pattern, e)[-1]
-                print(f'\033[1;31m[Error] {exc} in file "{exception[0]}" , line {exception[1]}\033[0m')
+                print(
+                    f'\033[1;31m[Error] {exc} in file "{exception[0]}" , line {exception[1]}\033[0m')
             elif level == 'default':
                 # 默认报错
                 traceback.print_exc()
