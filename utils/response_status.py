@@ -16,6 +16,8 @@ class ResponseStatus(Enum):
 
     UNEXPECTED_ERROR = (50000, '意外错误')
 
+    CSRF_FAILED_ERROR = (50001, 'CSRF认证失败')
+
     METHOD_NOT_ALLOWED_ERROR = (40000, '请求方法错误')
 
     VALIDATION_ERROR = (40001, '数据格式错误')
