@@ -117,6 +117,13 @@ class MyCustomBackend(ModelBackend):
 
 ```
 
+## 豁免CSRF的Session认证
+认证组件使用`csrfExemptAuth.py`中的`CsrfExemptSessionAuthentication`
+
+并在`settings.py`中配置`CSRF_EXEMPT_PATH_LIST`，内容为需要豁免CSRF的路径，例如:`/blog/list`。
+
+如果数组内容为`['all']`或者未配置，则所有使用该认证的免于CSRF认证
+
 ## 附录
 
 1. simplejwt的默认配置

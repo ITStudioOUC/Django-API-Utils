@@ -1,4 +1,4 @@
-from rest_framework.exceptions import MethodNotAllowed
+from rest_framework.exceptions import MethodNotAllowed, PermissionDenied
 from rest_framework.viewsets import ViewSet
 from rest_framework_simplejwt.exceptions import InvalidToken
 
@@ -10,12 +10,6 @@ from django.conf import settings
 
 import traceback
 import re
-
-debug = settings.DEBUG
-try:
-    level = settings.DEBUG_LEVEL
-except:
-    level = 'console'
 
 
 class ViewSetPlus(ViewSet):
@@ -44,8 +38,11 @@ class ViewSetPlus(ViewSet):
         # print(exc)
         # logger.error(exc)
 
+        debug = getattr(settings, 'DEBUG', True)
+        debug_level = getattr(settings, 'DEBUG_LEVEL', 'console')
+
         if debug:
-            if level == 'console':
+            if debug_level == 'console':
                 # 报错定位不准，放弃了
                 # file = exc.__traceback__.tb_frame.f_globals["__file__"]
                 # line = exc.__traceback__.tb_lineno
@@ -55,13 +52,16 @@ class ViewSetPlus(ViewSet):
                 exception = re.findall(pattern, e)[-1]
                 print(
                     f'\033[1;31m[Error] {exc} in file "{exception[0]}" , line {exception[1]}\033[0m')
-            elif level == 'default':
+            elif debug_level == 'default':
                 # 默认报错
                 traceback.print_exc()
             else:
                 pass
         if isinstance(exc, InvalidToken):
             return Response(ResponseStatus.TOKEN_ERROR)
+
+        if isinstance(exc, PermissionDenied) and 'CSRF Failed' in exc.detail:
+            return Response(ResponseStatus.CSRF_FAILED_ERROR)
 
         if isinstance(exc, MethodNotAllowed):
             return Response(ResponseStatus.METHOD_NOT_ALLOWED_ERROR)
