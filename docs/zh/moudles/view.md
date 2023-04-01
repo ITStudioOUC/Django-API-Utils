@@ -23,10 +23,10 @@
 
 ```python
 from rest_framework.parsers import JSONParser
-from autils.api_view import ViewSetPlus
-from autils.mapping import post_mapping, get_mapping
-from autils.response import Response
-from autils.response_status import ResponseStatus
+from it_drf_utils.api_view import ViewSetPlus
+from it_drf_utils.mapping import post_mapping, get_mapping
+from it_drf_utils.response import Response
+from it_drf_utils.response_status import ResponseStatus
 
 
 class BlogController(ViewSetPlus):
@@ -62,9 +62,9 @@ class BlogController(ViewSetPlus):
 #### 使用示例
 
 ```python
-from autils.api_view import APIViewPlus
-from autils.response import Response
-from autils.response_status import ResponseStatus
+from it_drf_utils.api_view import APIViewPlus
+from it_drf_utils.response import Response
+from it_drf_utils.response_status import ResponseStatus
 
 
 class BlogController(APIViewPlus):

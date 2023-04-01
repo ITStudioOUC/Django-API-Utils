@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0", "Django >= 3.2", "djangorestframework >= 3.12"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "it-drf-utils"
+version = "0.2.3"
+authors = [{ name = "ITStudio", email = "xiaobaitime@qq.com" }]
+description = "Django-API-Utils是基于Django编写后端API的一些组件和工具，致力于努力探究 Django 最佳实践。"
+readme = "README.md"
+requires-python = ">=3.2"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/ITStudioOUC/Django-API-Utils"
+"Bug Tracker" = "https://github.com/ITStudioOUC/Django-API-Utils/issues"

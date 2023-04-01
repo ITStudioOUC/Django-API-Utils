@@ -14,7 +14,7 @@
 
 ```python
 from django.urls import path, include
-from utils.router_builder import RouterBuilder
+from it_drf_utils.router_builder import RouterBuilder
 
 router = RouterBuilder()
 urlpatterns = [
@@ -29,7 +29,7 @@ urlpatterns = [
 
 ```python
 from django.urls import path, include
-from autils.router_builder import RouterBuilder
+from it_drf_utils.router_builder import RouterBuilder
 
 router = RouterBuilder()
 router.collect('user', 'team')  # 根据apps/user/team.py文件生成路由
@@ -66,7 +66,7 @@ urlpatterns = [
 
 ```python
 from django.urls import path, include
-from autils.router_builder import RouterBuilder
+from it_drf_utils.router_builder import RouterBuilder
 
 router = RouterBuilder()
 urlpatterns = [

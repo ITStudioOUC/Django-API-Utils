@@ -1,4 +1,3 @@
-
 # 项目说明
 
 Django-API-Utils是基于Django编写后端API的一些组件和工具，致力于努力探究 Django 最佳实践。
@@ -11,14 +10,15 @@ Django-API-Utils是基于Django编写后端API的一些组件和工具，致力�
 
 环境要求：
 
-`Django >= 3.2`, `djangorestframework >= 3.12` , `djangorestframework-simplejwt >= 5.0.0`
-（如果不使用认证组件，将auth.py删除即可，不必安装此模块）
+`Django >= 3.2`, `djangorestframework >= 3.12`
+（如需使用认证模块，请安装`djangorestframework-simplejwt >= 5.0.0`）
 
 # 初始化项目
 
-1. 下载本项目源码，将utils文件夹拖到项目根目录下
-
-   下载本项目源码可以使用git工具、直接在Github上Download ZIP、或者下载发布的release包。
+1. 使用pip安装
+   ```bash
+   pip install it-drf-utils
+   ```
 
 2. 新建`apps`目录，将项目内的app放入apps文件夹内。
 
@@ -35,7 +35,7 @@ Django-API-Utils是基于Django编写后端API的一些组件和工具，致力�
 4. 在根路由文件`urls.py`下初始化`Router Build`
 
    ```python
-   from autils.router_builder import RouterBuilder
+   from it_drf_utils.router_builder import RouterBuilder
    router = RouterBuilder()
    urlpatterns = [
        path("api/", include(router.urls)),
@@ -88,40 +88,6 @@ Django-API-Utils是基于Django编写后端API的一些组件和工具，致力�
 └── config.json[可选]
 ```
 
-# 使用示例
+# 使用教程
 
-```python
-# views.py
-# ViewSetPlus的使用
-class BlogController(ViewSetPlus):
-    base_url_name = "blog"
-    base_url_path = "blog"
-
-    @post_mapping(value="add")
-    def addBlog(self, request, *args, **kwargs):
-        api_data = JSONParser().parse(request)
-        serializer = BlogSerializer(data=api_data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response(ResponseStatus.OK)
-
-    @get_mapping(value="search")
-    def getBlog(self, request, *args, **kwargs):
-        queryset = Blog.objects.all()
-        serializers = BlogSerializer(queryset, many=True)
-        return Response(ResponseStatus.OK, serializers.data)
-
-# APIViewPlus的使用
-class BlogController(APIViewPlus):
-    url_pattern = '...'
-    
-    def get(self, request, *args, **kwargs):
-        ....
-        return Response(ResponseStatus.OK)
-
-    def post(self, request, *args, **kwargs):
-        ....
-        return Response(ResponseStatus.OK)
-   
-
-```
+更多详细信息请参考[在线文档](https://itstudioouc.github.io/Django-API-Utils/)    
