@@ -19,7 +19,7 @@ SIMPLE_JWT = {
 在路由中进行如下配置
 
 ```python
-from utils.auth import ITTokenRefreshView, ITTokenObtainPairView
+from it_drf_utils.auth import ITTokenRefreshView, ITTokenObtainPairView
 urlpatterns = [
     # 用于获取token
 	path(r"login/", ITTokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -81,7 +81,7 @@ ITAUTH_USER_MODEL = "user.User"
 
 ```python
 SIMPLE_JWT = {
-    'TOKEN_USER_CLASS': 'utils.auth.ITTokenUser'
+    'TOKEN_USER_CLASS': 'it_drf_utils.auth.ITTokenUser'
 }
 ```
 
