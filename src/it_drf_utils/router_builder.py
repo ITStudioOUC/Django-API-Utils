@@ -12,6 +12,8 @@ from importlib import import_module
 from inspect import getmembers, isclass
 
 from django.urls import path
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from rest_framework.routers import SimpleRouter
 
 from .api_view import ViewSetPlus
@@ -54,7 +56,10 @@ class RouterBuilder:
         自动收集 app 中的 views.py 里的类, 如果符合规范就自动构建 URL
         :return None
         """
-        project_dir_path = Path(__file__).resolve().parent.parent
+        if not hasattr(settings, 'BASE_DIR'):
+            raise ImproperlyConfigured("Missing `BASE_DIR` in settings.py")
+        project_dir_path = settings.BASE_DIR
+
         project_dir = os.listdir(project_dir_path)
         print("RouterBuilder run in project's path: {}".format(project_dir_path))
         if "apps" not in project_dir:
